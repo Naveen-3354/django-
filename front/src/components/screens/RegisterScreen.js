@@ -17,7 +17,7 @@ function RegisterScreen() {
 
   const submitHandler = async(e) => {
     e.preventDefault();
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       setMessage("Password do not Match");
     } else {
       try{

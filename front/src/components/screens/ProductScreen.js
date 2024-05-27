@@ -10,21 +10,26 @@ import {
   Form,
 } from "react-bootstrap";
 import Rating from "../Rating";
-import Loader from "../Loader";
 import Message from "../Message";
 import axios from "../../api/axois";
 import { useParams } from "react-router-dom";
+import MyAlert from "../Alter";
 
 function ProductScreen() {
+  const [show, setShow] = useState(false);
   const { id } = useParams();
   const [error, setError] = useState(null);
   const [product, setProduct] = useState([]);
   const [qty, setQty] = useState(1);
-  const [cart, setCart]=useState([])
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     getProducts();
-  setCart(JSON.parse(localStorage.getItem("cart")) !==null? JSON.parse(localStorage.getItem("cart")):[])
+    setCart(
+      JSON.parse(localStorage.getItem("cart")) !== null
+        ? JSON.parse(localStorage.getItem("cart"))
+        : []
+    );
   }, []);
 
   const getProducts = async () => {
@@ -40,29 +45,29 @@ function ProductScreen() {
     }
   };
   const addToCartHandler = (product) => {
-    const payload= {
+    const payload = {
       product: product._id,
       name: product.name,
       image: product.image,
       price: product.price,
       countInStock: product.countInStock,
-      qty
-  }
-  if(cart.length===0){
-    console.log('if');
-    cart.push(payload)
-  }
-  else{
-    // console.log('else');
-    // cart.forEach(x=> x.product===product._id ? x.qty+=qty: cart.push(payload))
-    if(cart.find(x=> x.product == payload.product)){
-      cart.forEach(x=> x.product===payload.product ? x.qty+=qty: qty)
-    }else{
-      cart.push(payload)
+      qty,
+    };
+    if (cart.length === 0) {
+      cart.push(payload);
+    } else {
+      // console.log('else');
+      // cart.forEach(x=> x.product===product._id ? x.qty+=qty: cart.push(payload))
+      if (cart.find((x) => x.product === payload.product)) {
+        cart.forEach((x) =>
+          x.product === payload.product ? (x.qty += qty) : qty
+        );
+      } else {
+        cart.push(payload);
+      }
     }
-  }
-  console.log(cart);
-    localStorage.setItem("cart", JSON.stringify(cart))
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setShow(true);
   };
 
   return (
@@ -72,6 +77,7 @@ function ProductScreen() {
         Go Back
       </Link>
 
+      
       {error ? (
         <Message variant="danger">{error} </Message>
       ) : (
@@ -151,15 +157,18 @@ function ProductScreen() {
                 <ListGroup.Item>
                   <Button
                     className="btn-block"
-                    disabled={product.countInStock == 0}
+                    disabled={product.countInStock === 0}
                     type="button"
-                    onClick={()=>{addToCartHandler(product)}}
+                    onClick={() => {
+                      addToCartHandler(product);
+                    }}
                   >
                     Add to Cart
                   </Button>
                 </ListGroup.Item>
               </ListGroup>
             </Card>
+            <MyAlert show={show} setShow={setShow} />
           </Col>
         </Row>
       )}

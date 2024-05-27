@@ -1,12 +1,12 @@
 // src/api/axios.js
 import axios from 'axios';
-
 // Create an Axios instance with global configuration
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8000', // Replace with your API base URL
   timeout: 10000, // 10 seconds timeout
   headers: {
     'Content-Type': 'application/json',
+    
     // Add other headers as needed
   },
 });

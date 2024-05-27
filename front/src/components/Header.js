@@ -1,58 +1,59 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function Header() {
-  const [userInfo,setUserInfo] = useState(null)
-  useEffect(()=>{
-    setUserInfo( localStorage.getItem("userInfo"))
-  },[])
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    setUserInfo(localStorage.getItem("userInfo"));
+  }, []);
   const logoutHandler = () => {
-    localStorage.removeItem('userInfo')
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("cart");
+    localStorage.removeItem("token");
+
   };
 
   return (
     <div>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <LinkContainer to="/" LinkContainer>
+          <Link to="/" style={{ textDecoration: "none" }}>
             <Navbar.Brand>A.R.K</Navbar.Brand>
-          </LinkContainer>
+          </Link>
 
           <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
+          <Navbar.Collapse id="navbarScroll" style={{ maxHeight: "100px", maxWidth:"100%" }}>
             <Nav
               className="mr-auto my-2 my-lg-0"
-              style={{ maxHeight: "100px" }}
+              style={{display:"flex", justifyContent:"space-evenly", width:"50%" , alignItems:"center",}}
               navbarScroll
             >
-              <LinkContainer to="/">
-                <Nav.Link>
-                  <i className="fas fa-home"></i> Home
-                </Nav.Link>
-              </LinkContainer>
+              <Link to="/" style={{ textDecoration: "none" ,  color:"#fff"}}>
+                <i className="fas fa-home"></i> Home
+              </Link>
 
-              <LinkContainer to="/cart">
-                <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i> Cart
-                </Nav.Link>
-              </LinkContainer>
+              <Link to="/cart" style={{ textDecoration: "none" ,  color:"#fff"}}>
+                <i className="fas fa-shopping-cart"></i> Cart
+              </Link>
               {userInfo ? (
-                <NavDropdown title={userInfo.name} id="username">
-                  <LinkContainer to="/profile">
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
-                  </LinkContainer>
+                <div style={{display:"flex", alignItems:"center", gap:"20px"}}>
+                  <Link to="/profile" style={{ textDecoration: "none" ,  color:"#fff"}}>
+                    <p style={{margin:"0",color:"#fff"}}>Profile</p>
+                  </Link>
 
-                  <NavDropdown.Item onClick={logoutHandler}>
+                  <p onClick={logoutHandler} style={{
+                    margin:'0',
+                    color:"#fff",
+                    cursor:"pointer"
+                  }}>
                     Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
+                  </p>
+                </div>
               ) : (
-                <LinkContainer to="/login">
-                  <Nav.Link>
-                    <i className="fas fa-user"></i> Login
-                  </Nav.Link>
-                </LinkContainer>
+                <Link to="/login" style={{ textDecoration: "none",color:"#fff" }}>
+                  <i className="fas fa-user"></i> Login
+                </Link>
               )}
             </Nav>
           </Navbar.Collapse>

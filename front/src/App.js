@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import HomeScreen from "./components/screens/HomeScreen";
@@ -7,24 +7,51 @@ import ProductScreen from "./components/screens/ProductScreen";
 import CartScreen from "./components/screens/CartScreen";
 import LoginScreen from "./components/screens/LoginScreen";
 import RegisterScreen from "./components/screens/RegisterScreen";
+import Profile from "./components/screens/Profile";
 
-function App() {
+const Layout = () => {
   return (
-    <Router>
+    <div>
       <Header />
-      <main className="py-3">
-          <Routes>
-            <Route path="/" element={<HomeScreen/>} exact />
-            <Route path="/login" element={<LoginScreen/>} exact />
-            <Route path="/register" element={<RegisterScreen/>} exact />
-            <Route path="/product/:id" element={<ProductScreen/>} exact />
-            <Route path="/cart/:id?" element={<CartScreen/>} exact />
-          </Routes>
-      </main>
-
+      <Outlet />
       <Footer />
-    </Router>
+    </div>
   );
+};
+function App() {
+  const route = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index:true,
+          element: <HomeScreen />,
+        },
+        {
+          path: "login",
+          element: <LoginScreen />,
+        },
+        {
+          path: "register",
+          element: <RegisterScreen />,
+        },
+        {
+          path: "product/:id",
+          element: <ProductScreen />,
+        },
+        {
+          path: "cart/:id?",
+          element: <CartScreen />,
+        },
+        {
+          path:"profile",
+          element:<Profile/>
+        }
+      ],
+    },
+  ]);
+  return <RouterProvider router={route} />;
 }
 
 export default App;
